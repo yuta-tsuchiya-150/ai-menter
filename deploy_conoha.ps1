@@ -12,6 +12,7 @@ ssh -i $Key -p 8022 -o StrictHostKeyChecking=no c6891274@www1211.conoha.ne.jp "m
 
 Write-Host "[2/3] ファイルを ConoHa WING へアップロード中..." -ForegroundColor Yellow
 scp -P 8022 -i $Key -o StrictHostKeyChecking=no tours-portal/index.html c6891274@www1211.conoha.ne.jp:~/public_html/2026091711175w334chu.conohawing.com/tours/index.html
+scp -P 8022 -i $Key -o StrictHostKeyChecking=no tours-portal/trends.html c6891274@www1211.conoha.ne.jp:~/public_html/2026091711175w334chu.conohawing.com/tours/trends.html
 scp -P 8022 -i $Key -o StrictHostKeyChecking=no tours-portal/tours/* c6891274@www1211.conoha.ne.jp:~/public_html/2026091711175w334chu.conohawing.com/tours/tours/
 scp -P 8022 -i $Key -o StrictHostKeyChecking=no tours-portal/assets/pdf/* c6891274@www1211.conoha.ne.jp:~/public_html/2026091711175w334chu.conohawing.com/tours/assets/pdf/
 

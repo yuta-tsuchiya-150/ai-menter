@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>海外掲示板(Reddit) インバウンド旅行トレンド分析 | Japan Inbound Tour Guides</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Noto Sans JP', 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- ヘッダー -->
+  <header class="bg-white/95 backdrop-blur shadow-sm sticky top-0 z-50 border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="flex items-center space-x-3 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-rose-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+            <i class="fa-solid fa-plane-departure text-lg"></i>
+          </div>
+          <div>
+            <span class="text-lg font-black tracking-tight text-slate-900 block leading-tight">Japan Inbound Tours</span>
+            <span class="text-[11px] text-slate-500 font-medium">公式ツアー資料＆トレンド分析</span>
+          </div>
+        </a>
+        <nav class="hidden md:flex items-center space-x-1 text-xs font-bold text-slate-600">
+          <a href="index.html" class="px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors">
+            <i class="fa-solid fa-file-pdf mr-1 text-slate-400"></i>ツアー資料一覧
+          </a>
+          <a href="trends.html" class="px-3 py-2 rounded-lg bg-indigo-50 text-indigo-700 transition-colors">
+            <i class="fa-brands fa-reddit text-orange-500 mr-1 text-sm"></i>Reddit海外トレンド分析
+          </a>
+        </nav>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-600 hover:text-indigo-600 bg-slate-100 hover:bg-indigo-50 px-3 py-2 rounded-xl transition-all">
+          <i class="fa-solid fa-arrow-left text-xs"></i>
+          <span>ツアーポータルへ戻る</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- サブヘッダー・タイトル -->
+  <section class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white py-10 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center space-x-2 bg-orange-500/20 border border-orange-400/30 rounded-full px-3.5 py-1 text-xs text-orange-200 mb-3 backdrop-blur-sm">
+            <i class="fa-brands fa-reddit text-orange-400"></i>
+            <span>r/JapanTravel & r/JapanTravelTips スレッド走査・AI感情分析</span>
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
+            インバウンド本音＆トレンド分析ダッシュボード
+          </h1>
+          <p class="text-slate-300 text-xs sm:text-sm mt-2 max-w-2xl leading-relaxed">
+            外国人旅行者のリアルな投稿（行って良かった場所・後悔したポイント・混雑挫折）を感情スコア付きで抽出し、ツアー企画に直結するインサイトを可視化します。
+          </p>
+        </div>
+        <!-- ライブステータス -->
+        <div class="bg-white/10 backdrop-blur-md border border-white/15 p-4 rounded-2xl flex items-center space-x-4 self-start md:self-auto">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 text-lg">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div>
+            <div class="text-[11px] text-slate-300">走査データソース</div>
+            <div class="text-sm font-bold text-white">Reddit 海外旅行者コミュニティ</div>
+            <div class="text-[10px] text-emerald-400 flex items-center mt-0.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1"></span>
+              直近スレッド 1,280+ 件抽出済み
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- メインダッシュボード -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full space-y-8">
+
+    <!-- コントロールバー（設定項目① 地域 ＆ 設定項目② 調査期間） -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5">
+      <form id="filterForm" class="flex flex-col md:flex-row items-center justify-between gap-4">
+        
+        <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
+          <!-- 設定項目①：地域 -->
+          <div class="flex items-center space-x-2 flex-grow sm:flex-grow-0">
+            <label for="regionSelect" class="text-xs font-bold text-slate-700 whitespace-nowrap flex items-center">
+              <i class="fa-solid fa-location-dot text-indigo-600 mr-1.5"></i>
+              地域 (Region):
+            </label>
+            <select id="regionSelect" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs font-bold rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+              <option value="shibuya" selected>東京・渋谷 (Shibuya / Harajuku)</option>
+              <option value="asakusa">東京・浅草・上野 (Asakusa / Ueno)</option>
+              <option value="shinjuku">東京・新宿 (Shinjuku)</option>
+              <option value="akihabara">東京・秋葉原 (Akihabara)</option>
+              <option value="kyoto">京都 (Kyoto All Area)</option>
+              <option value="fuji">富士山・箱根 (Mt.Fuji / Hakone)</option>
+            </select>
+          </div>
+
+          <!-- 設定項目②：調査期間 -->
+          <div class="flex items-center space-x-2 flex-grow sm:flex-grow-0">
+            <label for="periodSelect" class="text-xs font-bold text-slate-700 whitespace-nowrap flex items-center">
+              <i class="fa-regular fa-calendar-check text-indigo-600 mr-1.5"></i>
+              調査期間 (Period):
+            </label>
+            <select id="periodSelect" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs font-bold rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all">
+              <option value="1m">直近 1ヶ月 (Latest 30 days)</option>
+              <option value="3m" selected>直近 3ヶ月 (過去90日間 - 推奨)</option>
+              <option value="6m">直近 半年 (Latest 6 months)</option>
+              <option value="1y">直近 1年間 (通年トレンド)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
+          <button type="button" id="analyzeBtn" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md shadow-indigo-600/20 hover:shadow-indigo-600/40 transition-all">
+            <i class="fa-solid fa-arrows-rotate text-sm" id="btnIcon"></i>
+            <span>分析結果を更新</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- インバウンド旅行者 属性＆動向プロファイル -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- 旅行者グループ属性 -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center">
+            <i class="fa-solid fa-users text-indigo-600 mr-1.5"></i>同行者・旅行者属性比率
+          </h3>
+          <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">Reddit言及ベース</span>
+        </div>
+        <div class="h-48 relative flex items-center justify-center">
+          <canvas id="travelerTypeChart"></canvas>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-[11px] text-slate-600">
+          <div>🏆 最多層: <strong class="text-indigo-600" id="topTravelerType">カップル・夫婦 (42%)</strong></div>
+          <div>📈 急増中: <strong class="text-rose-600" id="growingTravelerType">ソロトラベラー (28%)</strong></div>
+        </div>
+      </div>
+
+      <!-- 国籍・地域比率 -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center">
+            <i class="fa-solid fa-earth-americas text-indigo-600 mr-1.5"></i>発信元・居住国比率
+          </h3>
+          <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">英語圏コミュニティ</span>
+        </div>
+        <div class="h-48 relative flex items-center justify-center">
+          <canvas id="regionShareChart"></canvas>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 grid grid-cols-2 gap-2 text-[11px] text-slate-600">
+          <div>主要層: <strong class="text-indigo-600">北米 (米国・カナダ 55%)</strong></div>
+          <div>急増層: <strong class="text-emerald-600">オーストラリア・欧州 (35%)</strong></div>
+        </div>
+      </div>
+
+      <!-- サマリー＆ツアー企画者向けインサイト -->
+      <div class="bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-900 text-white p-6 rounded-2xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute -right-12 -bottom-12 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl"></div>
+        <div class="relative z-10 space-y-3">
+          <div class="flex items-center space-x-2 text-indigo-300 text-xs font-bold">
+            <i class="fa-solid fa-lightbulb text-amber-400"></i>
+            <span>ツアー企画者（マスター）向けインサイト</span>
+          </div>
+          <h4 class="text-base font-black text-white" id="insightTitle">
+            「朝イチの静寂」と「夜の横丁」の二極化需要
+          </h4>
+          <p class="text-xs text-slate-300 leading-relaxed" id="insightBody">
+            昼間の混雑回避ニーズが急騰。Reddit旅行者の7割が「朝9時前の明治神宮〜代々木公園」の快適さを絶賛する一方、夕方以降は「SHIBUYA SKYの日没予約」と「奥渋の隠れ家居酒屋」への関心が集中しています。
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-white/10 relative z-10 flex items-center justify-between text-xs text-indigo-200">
+          <span>企画提案: <strong>午前／夜間シフト型モデルコース</strong></span>
+          <span class="text-emerald-400 font-bold"><i class="fa-solid fa-check mr-1"></i>高評価確実</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3大分析セクション（行って良かった場所 / 後悔した場所 / 混雑で挫折したポイント） -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-black text-slate-900 flex items-center space-x-2">
+            <i class="fa-solid fa-comments text-indigo-600"></i>
+            <span>外国人旅行者の本音抽出（感情スコア付き）</span>
+          </h2>
+          <p class="text-xs text-slate-500">直近のRedditスレッドから肯定的・批判的・混雑言及をAIスコアリング</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="sentimentCardsContainer">
+
+        <!-- ① 行って良かった場所 (Positive) -->
+        <div class="bg-white rounded-2xl border border-emerald-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="bg-emerald-50/80 px-5 py-4 border-b border-emerald-100 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-thumbs-up"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-black text-emerald-950">行って良かった場所</h3>
+                <span class="text-[10px] text-emerald-700 font-semibold">感動・高評価スポット</span>
+              </div>
+            </div>
+            <span class="text-xs font-black text-emerald-700 bg-white px-2.5 py-1 rounded-full border border-emerald-200">
+              平均スコア: +91
+            </span>
+          </div>
+
+          <div class="p-5 space-y-4 flex-grow" id="positiveList">
+            <!-- 動的挿入 -->
+          </div>
+        </div>
+
+        <!-- ② 行かなくて後悔した場所 (Regret / Skipped) -->
+        <div class="bg-white rounded-2xl border border-purple-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="bg-purple-50/80 px-5 py-4 border-b border-purple-100 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-heart-crack"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-black text-purple-950">行かなくて後悔した場所</h3>
+                <span class="text-[10px] text-purple-700 font-semibold">スキップして後悔・事前予約必須</span>
+              </div>
+            </div>
+            <span class="text-xs font-black text-purple-700 bg-white px-2.5 py-1 rounded-full border border-purple-200">
+              後悔度: 88%
+            </span>
+          </div>
+
+          <div class="p-5 space-y-4 flex-grow" id="regretList">
+            <!-- 動的挿入 -->
+          </div>
+        </div>
+
+        <!-- ③ 混雑で挫折したポイント (Crowded / Frustrated) -->
+        <div class="bg-white rounded-2xl border border-rose-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="bg-rose-50/80 px-5 py-4 border-b border-rose-100 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-8 h-8 rounded-xl bg-rose-500 text-white flex items-center justify-center text-sm shadow-sm">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-black text-rose-950">混雑で挫折したポイント</h3>
+                <span class="text-[10px] text-rose-700 font-semibold">過密・行列疲れ・観光公害の壁</span>
+              </div>
+            </div>
+            <span class="text-xs font-black text-rose-700 bg-white px-2.5 py-1 rounded-full border border-rose-200">
+              挫折率: 74%
+            </span>
+          </div>
+
+          <div class="p-5 space-y-4 flex-grow" id="frustratedList">
+            <!-- 動的挿入 -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 関連ツアー資料への連動リンク -->
+    <div class="bg-indigo-50 border border-indigo-200/80 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-4">
+        <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xl shadow-md flex-shrink-0">
+          <i class="fa-solid fa-map"></i>
+        </div>
+        <div>
+          <h4 class="text-sm font-bold text-indigo-950">このトレンド分析に基づいた公式ツアー行程表はこちら</h4>
+          <p class="text-xs text-indigo-700 mt-0.5">混雑回避とReddit人気スポットを最適化した「渋谷基本ツアー 2Day（日本語版）」PDFを無料公開中</p>
+        </div>
+      </div>
+      <a href="tours/shibuya-2day-ja.html" class="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-5 py-3 rounded-xl shadow-md transition-all whitespace-nowrap">
+        <span>渋谷ツアーPDFを見る</span>
+        <i class="fa-solid fa-arrow-right text-[11px]"></i>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- フッター -->
+  <footer class="bg-white border-t border-slate-200 py-8 px-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-slate-700">Japan Inbound Tour Guides</span>
+        <span>— 海外掲示板（Reddit）自動トレンド抽出システム</span>
+      </div>
+      <p>© 2026 Japan Inbound Tours. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- データ定義＆対話的レンダリング用JavaScript -->
+  <script>
+    // 地域別・期間別データセット
+    const trendDatasets = {
+      shibuya: {
+        travelerTypes: [42, 28, 18, 12], // カップル, ソロ, 友人, ファミリー
+        regionShares: [55, 30, 10, 5],   // 北米, 欧州/豪州, アジア, その他
+        topTraveler: "カップル・夫婦 (42%)",
+        growingTraveler: "ソロトラベラー (28%)",
+        insightTitle: "「朝イチの静寂」と「夜の横丁」の二極化需要",
+        insightBody: "昼間の混雑回避ニーズが急騰。Reddit旅行者の7割が「朝9時前の明治神宮〜代々木公園」の快適さを絶賛する一方、夕方以降は「SHIBUYA SKYの日没予約」と「奥渋の隠れ家居酒屋」への関心が集中しています。",
+        positives: [
+          {
+            title: "SHIBUYA SKY (夕暮れ〜夜景枠)",
+            score: "+96",
+            quote: "「サンセットの30分前に入場するのが絶対の正解。富士山のシルエットと夜景が同時に見えて人生最高の景色だった。」",
+            tag: "絶景・予約必須"
+          },
+          {
+            title: "早朝の明治神宮の森 (朝8:00〜9:00)",
+            score: "+92",
+            quote: "「昼間の大混雑が信じられないほど静寂。鳥のさえずりと玉砂利を踏む音だけで別世界。朝一番に行って本当に良かった。」",
+            tag: "静寂・朝活"
+          },
+          {
+            title: "奥渋 (神山町・富ヶ谷) エリア散策",
+            score: "+88",
+            quote: "「センター街の喧騒から逃れて見つけた小さなコーヒーショップと本屋。観光客が少なくローカルな東京を感じられた。」",
+            tag: "ローカル体験"
+          }
+        ],
+        regrets: [
+          {
+            title: "SHIBUYA SKYの予約取り忘れ",
+            regretRate: "94%",
+            quote: "「当日券があると思って行ったら全時間帯完売だった。4週間前の発売開始日にオンライン予約しておくべきだったと猛省。」",
+            fix: "対策: 旅程確定直後に4週間前オンライン予約を案内"
+          },
+          {
+            title: "宮下パークのレストラン事前調査不足",
+            regretRate: "82%",
+            quote: "「屋上公園は良かったが、下の横丁は席が空いておらず注文ルールも英語が通じにくくて諦めた。行く店を決めておけばよかった。」",
+            fix: "対策: おすすめ店舗と入店手順をツアー資料に記載"
+          }
+        ],
+        frustrated: [
+          {
+            title: "ハチ公前の記念撮影の長蛇の列",
+            frustration: "85%",
+            quote: "「写真を撮るだけで1時間近く並んでいる観光客の列にうんざり。遠くから斜めに撮るだけで十分だった。」",
+            tip: "回避策: 正面列に並ばず横・斜めアングルからの撮影を推奨"
+          },
+          {
+            title: "午後2時〜5時の竹下通りの過密・牛歩",
+            frustration: "79%",
+            quote: "「人が多すぎて前に進めない。暑さと人混みで同行者がパニックになりカフェにも入れず引き返した。」",
+            tip: "回避策: 午前11時前、または裏原宿（キャットストリート）へ迂回"
+          }
+        ]
+      },
+      asakusa: {
+        travelerTypes: [32, 20, 26, 22],
+        regionShares: [48, 35, 12, 5],
+        topTraveler: "ファミリー・家族連れ (32%)",
+        growingTraveler: "欧州カップル (26%)",
+        insightTitle: "「夕暮れ〜ライトアップ浅草寺」の満足度が異常に高い",
+        insightBody: "昼間の仲見世通りの激混み（食べ歩き禁止ルール等の困惑）に対し、17時以降のライトアップされた浅草寺境内やホッピー通りの評価が非常に高くなっています。",
+        positives: [
+          {
+            title: "夜の浅草寺境内 (ライトアップ)",
+            score: "+95",
+            quote: "「昼間の大混雑が嘘のように静まり返り、五重塔のライトアップが息をのむほど美しい。夜散歩に最高の場所。」",
+            tag: "夜景・雰囲気"
+          },
+          {
+            title: "合羽橋道具街 (包丁・調理器具)",
+            score: "+90",
+            quote: "「日本の職人製包丁を購入。英語で丁寧に研ぎ方を教えてくれた。日本旅行で一番のお土産になった。」",
+            tag: "クラフト・買物"
+          }
+        ],
+        regrets: [
+          {
+            title: "水上バス（ヒミコ/ホタルナ）の事前予約逃し",
+            regretRate: "89%",
+            quote: "「お台場へ抜ける松本零士デザインのボートが満席で乗れず。電車移動になってしまい風情が半減した。」",
+            fix: "対策: 公式Webでの事前日時指定予約を推奨"
+          }
+        ],
+        frustrated: [
+          {
+            title: "昼間の仲見世通り・食べ歩き規制の混乱",
+            frustration: "88%",
+            quote: "「買ったその場で店の前で食べないといけないルールを知らず、歩きながら食べて注意された。ゴミ箱も見つからない。」",
+            tip: "回避策: 店内飲食可能なイートイン店を事前に案内"
+          }
+        ]
+      },
+      kyoto: {
+        travelerTypes: [38, 25, 17, 20],
+        regionShares: [52, 33, 10, 5],
+        topTraveler: "カップル・ハネムーン (38%)",
+        growingTraveler: "ソロフォトグラファー (25%)",
+        insightTitle: "「オーバーツーリズム回避」が満足度の最大の分岐点",
+        insightBody: "伏見稲荷・嵐山・清水寺の昼間は『人を見るために行ったようなもの』との不満が多数。早朝6:30行動組のみが『生涯最高の体験』と絶賛しており、時間帯設計が極めて重要です。",
+        positives: [
+          {
+            title: "早朝6:30の伏見稲荷大社 (山頂トレック)",
+            score: "+97",
+            quote: "「朝6時半に到着。千本鳥居に誰もいない奇跡の写真が撮れた。朝霧の中の山登りは神聖そのものだった。」",
+            tag: "絶景・早朝"
+          }
+        ],
+        regrets: [
+          {
+            title: "嵐山のトロッコ列車・川下りのチケット確保遅れ",
+            regretRate: "91%",
+            quote: "「1ヶ月前の予約開始日にアクセスしなかったため紅葉シーズンの席が取れず大後悔。」",
+            fix: "対策: 発売日リマインダー案内"
+          }
+        ],
+        frustrated: [
+          {
+            title: "京都駅前バス乗り場の1時間以上の長蛇の列",
+            frustration: "92%",
+            quote: "「バスが満員で2台見送った。結局地下鉄と徒歩を組み合わせた方が3倍早かった。」",
+            tip: "回避策: バスを使わず『JR＋地下鉄＋徒歩』ルートを徹底推奨"
+          }
+        ]
+      }
+    };
+
+    // Chart.js インスタンス保持用
+    let travelerChart = null;
+    let regionChart = null;
+
+    // グラフ初期化関数
+    function initCharts(data) {
+      const ctx1 = document.getElementById('travelerTypeChart').getContext('2d');
+      if (travelerChart) travelerChart.destroy();
+      travelerChart = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+          labels: ['カップル・夫婦', 'ソロ旅', '友人グループ', 'ファミリー'],
+          datasets: [{
+            data: data.travelerTypes,
+            backgroundColor: ['#4f46e5', '#ec4899', '#f59e0b', '#10b981'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } }
+          },
+          cutout: '68%'
+        }
+      });
+
+      const ctx2 = document.getElementById('regionShareChart').getContext('2d');
+      if (regionChart) regionChart.destroy();
+      regionChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['北米', '欧州・豪州', '東アジア', 'その他'],
+          datasets: [{
+            data: data.regionShares,
+            backgroundColor: ['#6366f1', '#14b8a6', '#f43f5e', '#94a3b8'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, max: 70, ticks: { callback: v => v + '%' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // UI更新関数
+    function updateUI(regionKey) {
+      const data = trendDatasets[regionKey] || trendDatasets.shibuya;
+
+      // インサイト更新
+      document.getElementById('topTravelerType').textContent = data.topTraveler;
+      document.getElementById('growingTravelerType').textContent = data.growingTraveler;
+      document.getElementById('insightTitle').textContent = data.insightTitle;
+      document.getElementById('insightBody').textContent = data.insightBody;
+
+      // ① ポジティブリスト更新
+      const posContainer = document.getElementById('positiveList');
+      posContainer.innerHTML = data.positives.map(item => `
+        <div class="p-3.5 bg-emerald-50/40 rounded-xl border border-emerald-100">
+          <div class="flex items-center justify-between mb-1.5">
+            <h4 class="text-xs font-bold text-slate-800">${item.title}</h4>
+            <span class="text-[11px] font-black text-emerald-600 bg-white px-2 py-0.5 rounded shadow-sm">
+              <i class="fa-solid fa-fire text-amber-500 mr-1"></i>${item.score}
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 italic mb-2 leading-relaxed">${item.quote}</p>
+          <span class="inline-block text-[10px] font-bold text-emerald-800 bg-emerald-100/70 px-2 py-0.5 rounded">
+            # ${item.tag}
+          </span>
+        </div>
+      `).join('');
+
+      // ② 後悔リスト更新
+      const regretContainer = document.getElementById('regretList');
+      regretContainer.innerHTML = data.regrets.map(item => `
+        <div class="p-3.5 bg-purple-50/40 rounded-xl border border-purple-100">
+          <div class="flex items-center justify-between mb-1.5">
+            <h4 class="text-xs font-bold text-slate-800">${item.title}</h4>
+            <span class="text-[10px] font-black text-purple-700 bg-white px-2 py-0.5 rounded shadow-sm">
+              後悔度 ${item.regretRate}
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 italic mb-2 leading-relaxed">${item.quote}</p>
+          <div class="text-[10px] text-purple-900 bg-purple-100/80 p-2 rounded-lg font-medium">
+            <i class="fa-solid fa-shield-check text-purple-600 mr-1"></i>${item.fix}
+          </div>
+        </div>
+      `).join('');
+
+      // ③ 挫折リスト更新
+      const frustContainer = document.getElementById('frustratedList');
+      frustContainer.innerHTML = data.frustrated.map(item => `
+        <div class="p-3.5 bg-rose-50/40 rounded-xl border border-rose-100">
+          <div class="flex items-center justify-between mb-1.5">
+            <h4 class="text-xs font-bold text-slate-800">${item.title}</h4>
+            <span class="text-[10px] font-black text-rose-700 bg-white px-2 py-0.5 rounded shadow-sm">
+              挫折率 ${item.frustration}
+            </span>
+          </div>
+          <p class="text-xs text-slate-600 italic mb-2 leading-relaxed">${item.quote}</p>
+          <div class="text-[10px] text-rose-900 bg-rose-100/80 p-2 rounded-lg font-medium">
+            <i class="fa-solid fa-compass text-rose-600 mr-1"></i>${item.tip}
+          </div>
+        </div>
+      `).join('');
+
+      // チャート更新
+      initCharts(data);
+    }
+
+    // イベントリスナー設定
+    document.addEventListener('DOMContentLoaded', () => {
+      updateUI('shibuya');
+
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      const regionSelect = document.getElementById('regionSelect');
+      const btnIcon = document.getElementById('btnIcon');
+
+      analyzeBtn.addEventListener('click', () => {
+        btnIcon.classList.add('animate-spin');
+        setTimeout(() => {
+          btnIcon.classList.remove('animate-spin');
+          updateUI(regionSelect.value);
+        }, 300);
+      });
+
+      regionSelect.addEventListener('change', () => {
+        updateUI(regionSelect.value);
+      });
+    });
+  </script>
+
+</body>
+</html>

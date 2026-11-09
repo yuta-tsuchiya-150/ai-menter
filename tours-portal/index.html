@@ -30,7 +30,11 @@
         </div>
       </a>
       <div class="flex items-center space-x-3">
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <a href="trends.html" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-orange-50 hover:bg-orange-100 text-orange-700 border border-orange-200 transition-all shadow-sm">
+          <i class="fa-brands fa-reddit text-orange-500 text-sm"></i>
+          <span>Redditトレンド分析</span>
+        </a>
+        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1.5"></span>
           PDF公開中
         </span>
@@ -71,8 +75,37 @@
   </section>
 
   <!-- メインコンテンツ：ツアー資料一覧 -->
-  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12 w-full">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-slate-200 gap-4">
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12 w-full space-y-10">
+
+    <!-- 新機能バナー：Redditインバウンドトレンド分析 -->
+    <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500 rounded-3xl p-1 shadow-lg">
+      <div class="bg-white rounded-[22px] p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
+        <div class="flex items-start space-x-4">
+          <div class="w-14 h-14 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 text-3xl flex-shrink-0 shadow-sm">
+            <i class="fa-brands fa-reddit"></i>
+          </div>
+          <div class="space-y-1.5">
+            <div class="flex items-center space-x-2">
+              <span class="bg-orange-100 text-orange-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full">新機能リリース</span>
+              <span class="text-xs text-slate-500 font-semibold">直近3ヶ月の外国人旅行者スレッド走査</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-black text-slate-900 leading-tight">
+              海外掲示板(Reddit) インバウンド旅行トレンド＆本音分析
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
+              「行って良かった場所」「行かなくて後悔した場所」「混雑で挫折したポイント」を感情スコア付きで自動抽出。エリア別・属性別の最新トレンドが一目でわかります。
+            </p>
+          </div>
+        </div>
+        <a href="trends.html" class="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white font-bold text-xs sm:text-sm px-6 py-3.5 rounded-xl shadow-md shadow-orange-500/20 hover:shadow-orange-500/40 transition-all whitespace-nowrap self-stretch sm:self-auto justify-center group">
+          <span>トレンド分析ダッシュボードを開く</span>
+          <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-slate-200 gap-4">
       <div>
         <h2 class="text-2xl font-black text-slate-900 tracking-tight flex items-center space-x-2">
           <i class="fa-solid fa-route text-indigo-600"></i>
