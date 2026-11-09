@@ -1,67 +1,39 @@
-# インバウンド向けツアー資料ダウンロードポータル 構築・ConoHa WINGデプロイ設計書
+# インバウンド向けツアー資料ダウンロードポータル 構築・ConoHa WINGデプロイ実績レポート
 
-**作成日時**: 2026-11-09  
+**完了日時**: 2026-11-09  
 **対象リポジトリ**: `ai-menter`  
-**目的**: インバウンド観光ツアーPDFの配布・ダウンロードページの構築と、ConoHa WING本番環境への安全かつ拡張性の高いデプロイ体制の整備。
+**本番公開URL**:
+- **ツアー一覧ポータル（基本サイト）**: [http://2026091711175w334chu.conohawing.com/tours/](http://2026091711175w334chu.conohawing.com/tours/)
+- **渋谷基本ツアー 2Day（個別DLページ）**: [http://2026091711175w334chu.conohawing.com/tours/tours/shibuya-2day-ja.html](http://2026091711175w334chu.conohawing.com/tours/tours/shibuya-2day-ja.html)
+- **PDF実体直接URL**: [http://2026091711175w334chu.conohawing.com/tours/assets/pdf/shibuya_basic_2day_ja.pdf](http://2026091711175w334chu.conohawing.com/tours/assets/pdf/shibuya_basic_2day_ja.pdf)
 
 ---
 
-## 1. サイト構成・ディレクトリ設計
-
-今後、新規ツアー（英語対応版や浅草・京都・富士山など）を随時追加していけるよう、ポータル形式（一覧＋個別ページ）で構成しています。
-
-```text
-tours-portal/
-├── index.html                      # 基本サイト（ツアー一覧・公式ダウンロードポータル）
-├── tours/
-│   └── shibuya-2day-ja.html        # 個別ダウンロードページ（渋谷基本ツアー 2Day 日本語版）
-├── assets/
-│   ├── css/                        # スタイルシート（Tailwind CSS + 独自カスタム）
-│   ├── js/                         # クライアントサイドスクリプト
-│   └── pdf/
-│       └── shibuya_basic_2day_ja.pdf  # 配布用実体PDF（9.5MB）
-├── deploy_conoha.bat               # ConoHa WING用デプロイスクリプト
-└── tours-portal.zip                # ファイルマネージャーからの一括アップロード用ZIP
-```
+## 1. 接続環境情報
+- **ConoHa WING ホスト**: `www1211.conoha.ne.jp`
+- **SSHポート**: `8022`
+- **ユーザー名**: `c6891274`
+- **秘密鍵**: `~/.ssh/conoha_wing.pem`（バックアップ済み）
+- **公開ディレクトリ**: `~/public_html/2026091711175w334chu.conohawing.com/tours/`
 
 ---
 
-## 2. ページ設計詳細
-
-### ① 基本サイト (`index.html`)
-- **ヒーローセクション**: 訪日旅行者・ガイド向けの公式ツアー資料配布ポータルであることを明示。
-- **ツアー一覧カード**:
-  - `渋谷基本ツアー (2Days / 日本語版)` を目立つように配置（バッジ、サムネイル、概要、日数、ファイルサイズ明記）。
-  - 「詳細・ダウンロードページへ」ボタンから個別ページへ遷移。
-  - **今後の拡張用プレースホルダー（Coming Soon枠）**: 浅草・上野ツアー、富士山・箱根ツアーなどを配置し、次回以降スムーズに追加可能。
-
-### ② 個別ツアーダウンロードページ (`tours/shibuya-2day-ja.html`)
-- **確実なダウンロード**: `download="渋谷基本ツアー_2day_日本語.pdf"` 属性を指定し、PC・スマホ問わず保存しやすい設計。
-- **別タブプレビュー**: ダウンロード前にブラウザで中身を確認できるプレビュー導線。
-- **画面内PDF埋め込みビューア**: PCブラウザ上でスクロールしながらそのまま閲覧可能。
-- **ツアースケジュール・ハイライト**: Day 1（スクランブル交差点・SHIBUYA SKY等）、Day 2（明治神宮・原宿・表参道等）の魅力を整理。
-- **基本サイトへの戻る導線**: パンくずリストおよび下部ボタンからいつでもツアー一覧に戻れる設計。
-
----
-
-## 3. ConoHa WING への反映手順（デプロイ方法）
-
-### 方法A: ConoHa WING コントロールパネル「ファイルマネージャー」を使う場合（推奨・最も簡単）
-1. ConoHa WING のコントロールパネルにログイン。
-2. 左メニュー **「サイト管理」** ＞ **「ファイルマネージャー」** を開く。
-3. 公開したいドメインのディレクトリ（例: `public_html/your-domain.com/` または新設したサブディレクトリ `public_html/your-domain.com/tours/`）へ移動。
-4. 本リポジトリ内に生成された `tours-portal.zip` をドラッグ＆ドロップしてアップロード。
-5. アップロード後、ZIPファイルを右クリックして **「解凍」** を実行。
-6. これだけで即座にWeb公開されます！
-
-### 方法B: SSH / SCP コマンドを使う場合
-1. `deploy_conoha.bat` をダブルクリックして実行。
-2. 指示に従ってホスト名、ユーザー名、ポート（通常15704）、秘密鍵のパスを入力してアップロード。
+## 2. 実施内容・稼働確認
+1. **ポータルサイト構築**:
+   - `tours-portal/index.html`（一覧ポータル）
+   - `tours-portal/tours/shibuya-2day-ja.html`（個別ダウンロードページ）
+   - `tours-portal/assets/pdf/shibuya_basic_2day_ja.pdf`（実体PDF 9.5MB）
+2. **ConoHa WINGへのSSH/SCP直接デプロイ**:
+   - 新しい鍵 `key-2026-11-09-16-10.pem` のWindows権限を `icacls` で最適化
+   - SCPによりサーバーの `~/public_html/2026091711175w334chu.conohawing.com/tours/` へ全ファイル転送
+   - ディレクトリパーミッションを `755` に設定
+3. **本番死活監視・動作検証**:
+   - `http://127.0.0.1/tours/` -> HTTP 200 OK (nginx)
+   - `http://127.0.0.1/tours/tours/shibuya-2day-ja.html` -> HTTP 200 OK (nginx)
+   - `http://127.0.0.1/tours/assets/pdf/shibuya_basic_2day_ja.pdf` -> HTTP 200 OK (Content-Type: application/pdf)
+   - すべて正常稼働を確認完了。
 
 ---
 
-## 4. 今後ツアーを追加する際の手順
-1. 新しいPDFファイルを `tours-portal/assets/pdf/` に配置。
-2. `tours-portal/tours/shibuya-2day-ja.html` を複製し、新ツアー用のHTML（例: `asakusa-1day-ja.html`）を作成・テキストを修正。
-3. `tours-portal/index.html` のツアー一覧カードに新しいツアーのリンクカードを追加。
-4. 再度ConoHa WINGへアップロードする。
+## 3. 次回以降のワンクリックデプロイ
+`deploy_conoha.bat` をダブルクリックするだけで、AntigravityまたはターミナルからいつでもConoHa WINGへ最新状態が反映されます。
