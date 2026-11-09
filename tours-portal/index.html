@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>インバウンド向けツアー資料ダウンロード | Japan Inbound Tour Guides</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Noto Sans JP', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- ヘッダー -->
+  <header class="bg-white/95 backdrop-blur shadow-sm sticky top-0 z-50 border-b border-slate-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-rose-500 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-plane-departure text-lg"></i>
+        </div>
+        <div>
+          <span class="text-lg font-black tracking-tight text-slate-900 block leading-tight">Japan Inbound Tours</span>
+          <span class="text-[11px] text-slate-500 font-medium">公式ツアー資料・行程表ダウンロードポータル</span>
+        </div>
+      </a>
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1.5"></span>
+          PDF公開中
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ヒーローセクション -->
+  <section class="relative bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 text-white py-16 sm:py-24 px-4 overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <div class="inline-flex items-center space-x-2 bg-indigo-500/20 border border-indigo-400/30 rounded-full px-4 py-1.5 text-xs text-indigo-200 mb-6 backdrop-blur-sm">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span>厳選された訪日外国人向けモデルルート</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
+        インバウンド向けツアー資料<br class="hidden sm:inline">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-rose-300 to-amber-200">公式ダウンロードポータル</span>
+      </h1>
+      <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
+        観光ルート、見どころ、タイムスケジュール、移動手段を網羅したツアーPDF資料を無料提供しています。各ツアー専用ページから直接ダウンロードいただけます。
+      </p>
+      <div class="flex flex-wrap justify-center gap-4 text-xs text-slate-300">
+        <div class="flex items-center space-x-1.5 bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/10">
+          <i class="fa-regular fa-file-pdf text-rose-400"></i>
+          <span>高画質PDF形式</span>
+        </div>
+        <div class="flex items-center space-x-1.5 bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/10">
+          <i class="fa-solid fa-mobile-screen-button text-indigo-300"></i>
+          <span>スマホ・オフライン閲覧対応</span>
+        </div>
+        <div class="flex items-center space-x-1.5 bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/10">
+          <i class="fa-solid fa-clock-rotate-left text-amber-300"></i>
+          <span>随時最新コース追加予定</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- メインコンテンツ：ツアー資料一覧 -->
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12 w-full">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-slate-200 gap-4">
+      <div>
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight flex items-center space-x-2">
+          <i class="fa-solid fa-route text-indigo-600"></i>
+          <span>ツアー資料一覧</span>
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">ご覧になりたいツアーのダウンロードページを選択してください。</p>
+      </div>
+      <div class="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-md self-start sm:self-auto">
+        公開中: <strong class="text-indigo-600">1件</strong> / 順次追加中
+      </div>
+    </div>
+
+    <!-- ツアーカード一覧グリッド -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- カード1: 渋谷基本ツアー 2Days (公開中) -->
+      <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/80 overflow-hidden flex flex-col group">
+        <div class="relative h-48 bg-gradient-to-tr from-slate-800 via-indigo-900 to-purple-900 flex items-center justify-center p-6 overflow-hidden">
+          <div class="absolute inset-0 bg-cover bg-center opacity-30 group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80');"></div>
+          <div class="relative z-10 text-center">
+            <span class="inline-block bg-rose-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full mb-2 shadow-sm">
+              人気No.1 基本コース
+            </span>
+            <h3 class="text-xl font-black text-white tracking-wide">
+              渋谷基本ツアー
+            </h3>
+            <p class="text-xs text-indigo-200 mt-1 font-medium">SHIBUYA 2-DAY HIGHLIGHTS</p>
+          </div>
+          <div class="absolute top-3 right-3 bg-white/90 backdrop-blur text-slate-800 text-[11px] font-bold px-2.5 py-1 rounded-md shadow-sm flex items-center space-x-1">
+            <i class="fa-solid fa-calendar-days text-indigo-600"></i>
+            <span>2 Days</span>
+          </div>
+        </div>
+
+        <div class="p-6 flex flex-col flex-grow">
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="text-[11px] font-semibold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-100">
+              <i class="fa-solid fa-location-dot mr-1"></i>東京・渋谷
+            </span>
+            <span class="text-[11px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-100">
+              <i class="fa-solid fa-language mr-1"></i>日本語版
+            </span>
+            <span class="text-[11px] font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded">
+              PDF (約9.5MB)
+            </span>
+          </div>
+
+          <h4 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
+            渋谷基本ツアー 2Day モデルコース
+          </h4>
+          <p class="text-xs text-slate-600 leading-relaxed mb-6 flex-grow">
+            スクランブル交差点、最先端トレンド、グルメ、原宿・明治神宮への散策ルートまでを凝縮したインバウンド旅行者向けの2日間王道モデルコース行程表です。
+          </p>
+
+          <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div class="flex items-center text-xs text-slate-500">
+              <i class="fa-regular fa-file-lines mr-1.5 text-indigo-500"></i>
+              <span>詳細行程表・マップ付</span>
+            </div>
+            <a href="tours/shibuya-2day-ja.html" class="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm hover:shadow transition-all group-hover:translate-x-1">
+              <span>ダウンロードページへ</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- カード2: 近日追加予定 1 (Coming Soon) -->
+      <div class="bg-white/60 rounded-2xl border border-dashed border-slate-300 p-6 flex flex-col items-center justify-center text-center min-h-[360px] opacity-75 hover:opacity-100 transition-opacity">
+        <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
+          <i class="fa-solid fa-torii-gate text-2xl"></i>
+        </div>
+        <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full mb-2 border border-amber-200">
+          Coming Soon
+        </span>
+        <h4 class="text-base font-bold text-slate-700 mb-1">
+          浅草・上野 伝統文化巡りツアー
+        </h4>
+        <p class="text-xs text-slate-500 max-w-xs leading-relaxed mb-4">
+          歴史ある寺社仏閣、下町グルメ、伝統工芸体験を盛り込んだツアー資料を準備中です。
+        </p>
+        <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg">
+          近日公開予定
+        </span>
+      </div>
+
+      <!-- カード3: 近日追加予定 2 (Coming Soon) -->
+      <div class="bg-white/60 rounded-2xl border border-dashed border-slate-300 p-6 flex flex-col items-center justify-center text-center min-h-[360px] opacity-75 hover:opacity-100 transition-opacity">
+        <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
+          <i class="fa-solid fa-mountain-sun text-2xl"></i>
+        </div>
+        <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full mb-2 border border-amber-200">
+          Coming Soon
+        </span>
+        <h4 class="text-base font-bold text-slate-700 mb-1">
+          富士山・箱根 日帰り〜1泊ハイライト
+        </h4>
+        <p class="text-xs text-slate-500 max-w-xs leading-relaxed mb-4">
+          四季折々の絶景スポットと温泉・交通パスをまとめたインバウンド必携ガイドを制作中。
+        </p>
+        <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1.5 rounded-lg">
+          近日公開予定
+        </span>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- フッター -->
+  <footer class="bg-white border-t border-slate-200 py-8 px-4 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-2">
+        <span class="font-bold text-slate-700">Japan Inbound Tour Guides</span>
+        <span>— 公式ツアー資料ダウンロードサイト</span>
+      </div>
+      <div>
+        <p>© 2026 Japan Inbound Tours. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
