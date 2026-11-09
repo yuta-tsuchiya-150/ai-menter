@@ -4,3 +4,4 @@ Write-Host "`n==========================================" -ForegroundColor Green
 Write-Host " [SUCCESS] Pull completed successfully!" -ForegroundColor Green
 Write-Host "==========================================" -ForegroundColor Green
 Start-Sleep -Seconds 2
+

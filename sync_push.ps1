@@ -14,3 +14,4 @@ if ($status) {
     Write-Host "[SUCCESS] Up to date." -ForegroundColor Green
 }
 Start-Sleep -Seconds 2
+
